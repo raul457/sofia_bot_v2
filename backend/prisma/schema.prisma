@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  RECEPTIONIST
+  PSYCHOLOGIST
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum SlotStatus {
+  AVAILABLE
+  RESERVED
+  BLOCKED
+}
+
+enum Modality {
+  PRESENTIAL
+  TELECONSULT
+  BOTH
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  password     String
+  role         Role          @default(RECEPTIONIST)
+  psychologist Psychologist?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Psychologist {
+  id           String        @id @default(uuid())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty    String
+  bio          String?
+  slots        Slot[]
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+
+  @@map("psychologists")
+}
+
+model Patient {
+  id            String        @id @default(uuid())
+  name          String
+  birthDate     DateTime      @db.Date
+  phone         String        @unique
+  email         String?
+  insuranceType String?
+  insuranceName String?
+  isVulnerable  Boolean       @default(false)
+  consentGiven  Boolean       @default(false)
+  consentDate   DateTime?
+  appointments  Appointment[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("patients")
+}
+
+model Slot {
+  id             String       @id @default(uuid())
+  psychologistId String
+  psychologist   Psychologist @relation(fields: [psychologistId], references: [id])
+  date           DateTime     @db.Date
+  startTime      String
+  endTime        String
+  durationMin    Int          @default(50)
+  modality       Modality     @default(PRESENTIAL)
+  status         SlotStatus   @default(AVAILABLE)
+  appointment    Appointment?
+  createdAt      DateTime     @default(now())
+
+  @@index([date, status])
+  @@map("slots")
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  patientId       String
+  patient         Patient           @relation(fields: [patientId], references: [id])
+  psychologistId  String
+  psychologist    Psychologist      @relation(fields: [psychologistId], references: [id])
+  slotId          String            @unique
+  slot            Slot              @relation(fields: [slotId], references: [id])
+  status          AppointmentStatus @default(SCHEDULED)
+  modality        Modality
+  notes           String?
+  teleconsultUrl  String?
+  reminderSent24h Boolean           @default(false)
+  reminderSent2h  Boolean           @default(false)
+  confirmedAt     DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([status, createdAt])
+  @@map("appointments")
+}
+
+model ConversationLog {
+  id        String   @id @default(uuid())
+  phone     String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([phone, createdAt])
+  @@map("conversation_logs")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  phone     String
+  message   String
+  type      String
+  sent      Boolean  @default(false)
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}

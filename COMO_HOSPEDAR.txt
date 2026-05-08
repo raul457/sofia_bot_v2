@@ -1,0 +1,425 @@
+========================================================
+  COMO COLOCAR O BOT SOFIA NO AR — GUIA PARA INICIANTES
+========================================================
+
+Tempo estimado: 1 a 2 horas
+Custo: GRATUITO (usando os planos free de cada serviço)
+
+Você vai precisar criar conta em 4 sites:
+  1. GitHub (guarda o código)
+  2. Supabase (banco de dados)
+  3. Vercel (hospeda o site/bot)
+  4. Anthropic (inteligência artificial — a "mente" da Sofia)
+
+E opcionalmente:
+  5. Evolution API ou Z-API (integração com WhatsApp)
+
+Não se preocupe, vou explicar tudo passo a passo.
+
+--------------------------------------------------------
+PARTE 1 — INSTALAR O NODE.JS NO SEU COMPUTADOR
+--------------------------------------------------------
+
+O Node.js é o programa que roda o projeto localmente
+antes de colocar no ar.
+
+PASSO 1:
+  Acesse: https://nodejs.org
+  Clique no botão verde escrito "LTS" (versão recomendada)
+  Baixe e instale normalmente (clique em "Avançar" em tudo)
+
+PASSO 2 — Verifique se instalou certo:
+  Abra o "Prompt de Comando" (aperte a tecla Windows,
+  digite "cmd" e aperte Enter)
+
+  Digite o comando abaixo e aperte Enter:
+    node -v
+
+  Se aparecer algo como "v20.x.x", está correto!
+
+--------------------------------------------------------
+PARTE 2 — CRIAR CONTA NO GITHUB
+--------------------------------------------------------
+
+O GitHub é onde o código do projeto fica guardado.
+A Vercel vai buscar o código de lá para publicar.
+
+PASSO 1:
+  Acesse: https://github.com
+  Clique em "Sign up" (canto superior direito)
+  Preencha: usuário, e-mail e senha
+  Confirme o e-mail que vai chegar na sua caixa
+
+PASSO 2 — Criar um repositório (pasta online):
+  Após entrar no GitHub, clique em "New" (botão verde)
+  Em "Repository name", escreva: sofia-bot
+  Deixe marcado "Private" (privado)
+  Clique em "Create repository"
+  Deixe essa página aberta — você vai precisar dela
+
+PASSO 3 — Instalar o Git no computador:
+  Acesse: https://git-scm.com/download/win
+  Baixe e instale (clique em "Avançar" em tudo)
+
+PASSO 4 — Enviar o projeto para o GitHub:
+  Abra o Prompt de Comando
+
+  Cole os comandos abaixo UM POR VEZ,
+  trocando SEU_USUARIO pelo seu nome de usuário do GitHub:
+
+    cd "C:\Users\rraou\OneDrive\Área de Trabalho\botwhats\frontend"
+    git init
+    git add .
+    git commit -m "primeiro commit"
+    git branch -M main
+    git remote add origin https://github.com/SEU_USUARIO/sofia-bot.git
+    git push -u origin main
+
+  Se pedir usuário e senha do GitHub, informe os seus dados.
+  Uma janela pode abrir pedindo para fazer login — aceite.
+
+  ✅ Pronto! O código está no GitHub.
+
+--------------------------------------------------------
+PARTE 3 — CRIAR O BANCO DE DADOS NO SUPABASE
+--------------------------------------------------------
+
+O banco de dados guarda todas as informações:
+pacientes, consultas, horários, conversas, etc.
+
+PASSO 1:
+  Acesse: https://supabase.com
+  Clique em "Start your project" ou "Sign Up"
+  Crie conta com Google ou e-mail
+
+PASSO 2 — Criar um projeto novo:
+  Clique em "New Project"
+  Escolha um nome (ex: sofia-bot)
+  Crie uma senha forte para o banco (ANOTE essa senha!)
+  Escolha a região: South America (São Paulo)
+  Clique em "Create new project"
+  Aguarde alguns minutos — o Supabase vai configurar tudo
+
+PASSO 3 — Pegar as informações de conexão:
+  No menu lateral, clique em "Project Settings" (ícone de engrenagem)
+  Clique em "Database"
+  Role a página até encontrar "Connection string"
+  Clique na aba "URI"
+
+  Você vai ver dois campos importantes. Copie e guarde cada um:
+
+  ► DATABASE_URL:
+    Mude "Transaction pooler" (porta 6543)
+    Copie a string que começa com:
+    postgresql://postgres.XXXXX:SUA_SENHA@...
+
+  ► DIRECT_URL:
+    Mude para "Session pooler" (porta 5432)
+    Copie a string que começa com:
+    postgresql://postgres.XXXXX:SUA_SENHA@...
+
+  ATENÇÃO: nas duas strings, substitua [YOUR-PASSWORD]
+  pela senha que você criou no passo anterior!
+
+  ✅ Guarde essas duas strings — você vai precisar delas.
+
+--------------------------------------------------------
+PARTE 4 — OBTER A CHAVE DA INTELIGÊNCIA ARTIFICIAL
+--------------------------------------------------------
+
+A "inteligência" da Sofia vem da Anthropic (criadora do Claude).
+
+PASSO 1:
+  Acesse: https://console.anthropic.com
+  Clique em "Sign Up" e crie sua conta
+
+PASSO 2 — Adicionar créditos (necessário para usar a API):
+  No menu, clique em "Billing"
+  Adicione um cartão de crédito
+  Compre pelo menos $5 de créditos (suficiente para meses de teste)
+
+  OBS: Sem créditos, a Sofia não consegue responder.
+  O consumo é muito baixo — $5 dura bastante para testes.
+
+PASSO 3 — Criar a chave de API:
+  No menu, clique em "API Keys"
+  Clique em "Create Key"
+  Dê um nome (ex: sofia-bot)
+  Copie a chave que aparecer — ela começa com "sk-ant-"
+
+  ⚠️ IMPORTANTE: Essa chave aparece só uma vez!
+     Guarde ela em um lugar seguro agora.
+
+  ✅ Você tem sua chave da Anthropic.
+
+--------------------------------------------------------
+PARTE 5 — PUBLICAR O PROJETO NA VERCEL
+--------------------------------------------------------
+
+A Vercel vai pegar o código do GitHub e publicar na internet.
+
+PASSO 1 — Criar conta na Vercel:
+  Acesse: https://vercel.com
+  Clique em "Sign Up"
+  Clique em "Continue with GitHub" (mais fácil!)
+  Autorize a conexão entre Vercel e GitHub
+
+PASSO 2 — Importar o projeto:
+  No painel da Vercel, clique em "Add New..." → "Project"
+  Você verá o repositório "sofia-bot" que criou
+  Clique em "Import" ao lado dele
+
+PASSO 3 — Configurar o projeto:
+  Em "Root Directory", clique em "Edit"
+  Selecione a pasta "frontend" e clique em "Continue"
+
+  IMPORTANTE: O campo "Root Directory" deve mostrar "frontend"
+  Se não aparecer essa opção, deixe em branco mesmo.
+
+  NÃO clique em Deploy ainda!
+
+PASSO 4 — Adicionar as variáveis de ambiente:
+  Ainda na mesma tela, role para baixo até
+  "Environment Variables"
+
+  Você vai adicionar cada item abaixo.
+  Para cada um, clique em "Add" e preencha
+  o nome e o valor:
+
+  ┌─────────────────────────────┬──────────────────────────────────────────┐
+  │ NOME                        │ VALOR                                    │
+  ├─────────────────────────────┼──────────────────────────────────────────┤
+  │ DATABASE_URL                │ (a string do Supabase - porta 6543)      │
+  │ DIRECT_URL                  │ (a string do Supabase - porta 5432)      │
+  │ ANTHROPIC_API_KEY           │ (sua chave sk-ant-...)                   │
+  │ JWT_SECRET                  │ (inventar qualquer frase longa,          │
+  │                             │  ex: MinhaClincaSecreta2024Segura!)      │
+  │ CRON_SECRET                 │ (inventar qualquer palavra,              │
+  │                             │  ex: lembrete-automatico-2024)           │
+  │ CLINIC_NAME                 │ (nome da sua clínica)                    │
+  │ CLINIC_ADDRESS              │ (endereço completo da clínica)           │
+  │ CLINIC_PHONE                │ (telefone com DDD, ex: 5511999999999)    │
+  │ TELECONSULT_URL             │ (link do Google Meet ou Jitsi)           │
+  │ ADMIN_NOTIFICATION_PHONE    │ (seu celular: 5511999999999)             │
+  │ WHATSAPP_API_URL            │ (preencher depois — deixar em branco)    │
+  │ WHATSAPP_API_TOKEN          │ (preencher depois — deixar em branco)    │
+  │ WHATSAPP_INSTANCE           │ sofia                                    │
+  └─────────────────────────────┴──────────────────────────────────────────┘
+
+  DICA PARA O JWT_SECRET: use uma frase longa sem espaços.
+  Exemplo: MinhaSenhaSecreta2024BotSofia!
+
+  DICA PARA O TELECONSULT_URL: acesse https://meet.jit.si,
+  entre numa sala qualquer e copie o link. Funciona grátis!
+
+PASSO 5 — Fazer o deploy:
+  Clique no botão "Deploy"
+  Aguarde 2 a 5 minutos enquanto a Vercel monta tudo
+
+  Quando aparecer "Congratulations!", o site está no ar!
+  Clique em "Visit" para ver o painel da Sofia.
+  Anote a URL do seu projeto (ex: sofia-bot.vercel.app)
+
+--------------------------------------------------------
+PARTE 6 — CRIAR O BANCO DE DADOS (TABELAS)
+--------------------------------------------------------
+
+Agora precisamos criar as tabelas no banco.
+Voltamos ao Prompt de Comando para isso.
+
+PASSO 1 — Instalar dependências do projeto:
+  No Prompt de Comando, execute:
+
+    cd "C:\Users\rraou\OneDrive\Área de Trabalho\botwhats\frontend"
+    npm install
+
+  Aguarde terminar (pode demorar alguns minutos).
+
+PASSO 2 — Baixar as variáveis de ambiente da Vercel:
+  Execute:
+    npx vercel login
+
+  Vai abrir o navegador pedindo para autorizar — autorize.
+
+  Depois execute:
+    npx vercel link
+
+  Quando perguntar se quer conectar ao projeto existente,
+  responda "yes" e selecione o projeto sofia-bot.
+
+  Depois execute:
+    npx vercel env pull .env.local
+
+  Isso baixa todas as variáveis que você configurou.
+
+PASSO 3 — Criar as tabelas no banco:
+  Execute:
+    npx prisma migrate deploy
+
+  Aguarde terminar.
+
+PASSO 4 — Criar os usuários iniciais:
+  Execute:
+    npm run db:seed
+
+  Quando terminar, você verá:
+    "Admin: admin@clinicasofia.com / admin123"
+    "Psicóloga: psi@clinicasofia.com / admin123"
+
+PASSO 5 — Acessar o painel:
+  Abra o navegador e acesse: https://SUA-URL.vercel.app
+  (a URL que apareceu quando o deploy terminou)
+
+  Faça login com:
+    E-mail: admin@clinicasofia.com
+    Senha:  admin123
+
+  ⚠️ IMPORTANTE: Troque a senha logo após entrar!
+     Vá em Configurações e crie um novo usuário com
+     sua senha pessoal.
+
+  ✅ O painel da Sofia está funcionando!
+
+--------------------------------------------------------
+PARTE 7 — CONECTAR AO WHATSAPP (Z-API — MAIS FÁCIL)
+--------------------------------------------------------
+
+Existem duas opções para conectar ao WhatsApp.
+Para iniciantes, recomendo a Z-API (mais simples, tem plano grátis para testar).
+
+PASSO 1:
+  Acesse: https://z-api.io
+  Crie uma conta gratuita
+  Clique em "Criar Instância"
+  Dê um nome (ex: sofia)
+
+PASSO 2 — Conectar seu WhatsApp:
+  Clique na instância criada
+  Clique em "QR Code"
+  Abra o WhatsApp no celular
+  Vá em: Menu → Aparelhos conectados → Conectar aparelho
+  Aponte a câmera para o QR Code na tela
+
+  ✅ Seu WhatsApp está conectado!
+
+PASSO 3 — Pegar as informações da Z-API:
+  Na Z-API, clique na sua instância
+  Copie o "ID da instância" e o "Token"
+
+PASSO 4 — Atualizar as variáveis na Vercel:
+  Acesse o painel da Vercel → Seu projeto → Settings
+  Clique em "Environment Variables"
+  Atualize (ou adicione) os seguintes valores:
+
+    WHATSAPP_API_URL  →  https://api.z-api.io
+    WHATSAPP_API_TOKEN → (seu token da Z-API)
+    WHATSAPP_INSTANCE → (ID da sua instância Z-API)
+
+  Após salvar, clique em "Redeploy" para aplicar as mudanças.
+
+PASSO 5 — Configurar o webhook (receber mensagens):
+  Na Z-API, clique na sua instância
+  Vá em "Webhooks"
+  No campo "Recebimento de mensagens", cole:
+    https://SUA-URL.vercel.app/api/webhook
+
+  Salve.
+
+  ✅ Agora quando alguém mandar mensagem no WhatsApp
+     conectado, a Sofia vai responder!
+
+--------------------------------------------------------
+PARTE 8 — TESTAR SE ESTÁ FUNCIONANDO
+--------------------------------------------------------
+
+PASSO 1 — Testar o painel:
+  Acesse: https://SUA-URL.vercel.app
+  Faça login com as credenciais
+  Você deve ver o Dashboard com as métricas
+
+PASSO 2 — Testar o bot:
+  Mande uma mensagem de qualquer número para o
+  WhatsApp que você conectou na Z-API
+
+  A Sofia deve responder em alguns segundos.
+
+PASSO 3 — Testar o agendamento:
+  Primeiro, crie horários disponíveis:
+    - No painel, clique em "Horários"
+    - Clique em "Gerar horários em lote"
+    - Selecione a psicóloga, os dias e horários
+    - Clique em "Gerar"
+
+  Depois, mande uma mensagem no WhatsApp:
+    "Quero agendar uma consulta"
+
+  A Sofia deve perguntar suas preferências e
+  mostrar os horários disponíveis.
+
+--------------------------------------------------------
+PARTE 9 — PERSONALIZAR A SOFIA
+--------------------------------------------------------
+
+Para mudar o nome da clínica, endereço e outras
+informações, basta atualizar as variáveis de ambiente
+na Vercel (Settings → Environment Variables).
+
+Variáveis que você pode querer personalizar:
+  CLINIC_NAME    → Nome da sua clínica
+  CLINIC_ADDRESS → Endereço para consultas presenciais
+  CLINIC_PHONE   → Telefone de contato
+  TELECONSULT_URL → Link para teleconsultas
+
+Após qualquer mudança nas variáveis, a Vercel
+vai fazer um novo deploy automaticamente.
+
+--------------------------------------------------------
+PROBLEMAS COMUNS E SOLUÇÕES
+--------------------------------------------------------
+
+❌ "A Sofia não responde no WhatsApp"
+   → Verifique se o webhook está configurado corretamente
+   → Confirme que WHATSAPP_API_URL e WHATSAPP_API_TOKEN estão corretos
+   → Reacesse o painel da Z-API e verifique se a instância está "Conectada"
+
+❌ "Erro ao fazer login no painel"
+   → Verifique se o seed foi executado com sucesso
+   → Tente executar novamente: npm run db:seed
+
+❌ "The page you're looking for doesn't exist"
+   → O deploy pode não ter terminado. Aguarde 5 minutos e tente novamente.
+
+❌ "Erro de banco de dados"
+   → Verifique se DATABASE_URL e DIRECT_URL estão corretos
+   → Confirme que substituiu [YOUR-PASSWORD] pela senha real
+
+❌ "A Vercel pede para pagar para usar cron jobs"
+   → Os lembretes automáticos exigem o plano Pro da Vercel ($20/mês)
+   → Para testes, isso pode ser ignorado — apenas os lembretes não funcionarão
+   → O resto do sistema (agendamento, painel, bot) funciona normalmente
+
+--------------------------------------------------------
+RESUMO DAS CREDENCIAIS INICIAIS
+--------------------------------------------------------
+
+Painel administrativo:
+  URL:   https://SUA-URL.vercel.app
+  Admin: admin@clinicasofia.com / admin123
+  Psi:   psi@clinicasofia.com / admin123
+
+⚠️ Troque essas senhas assim que possível!
+
+--------------------------------------------------------
+PRECISA DE AJUDA?
+--------------------------------------------------------
+
+Se travar em algum passo, anote exatamente:
+  - Em qual parte você parou
+  - Qual mensagem de erro apareceu
+  - O que você tentou fazer
+
+Isso facilita muito encontrar a solução!
+
+========================================================
+  FIM DO GUIA
+========================================================
